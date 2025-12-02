@@ -1,7 +1,7 @@
 {
-  "name": "spike-test",
+  "name": "episolve-website",
   "version": "1.0.0",
-  "description": "Website template for Payload",
+  "description": "Episolve LLC corporate website built with Payload CMS",
   "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@9.15.0",
