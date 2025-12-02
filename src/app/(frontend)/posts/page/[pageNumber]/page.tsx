@@ -73,6 +73,11 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 export async function generateStaticParams() {
+  // Skip static generation during build on Railway
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    return []
+  }
+
   const payload = await getPayload({ config: configPromise })
   const { totalDocs } = await payload.count({
     collection: 'posts',

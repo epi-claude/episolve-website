@@ -19,6 +19,11 @@ import { LivePreviewListener } from '@/components/LivePreviewListener'
 export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
+  // Skip static generation during build on Railway
+  if (process.env.RAILWAY_ENVIRONMENT) {
+    return []
+  }
+
   const payload = await getPayload({ config: configPromise })
   const posts = await payload.find({
     collection: 'posts',
