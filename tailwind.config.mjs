@@ -49,11 +49,22 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'fade-in': 'fade-in 0.5s ease-out',
+        'slide-up': 'slide-up 0.5s ease-out',
+        'scale-in': 'scale-in 0.3s ease-out',
       },
       borderRadius: {
         lg: 'var(--radius)',
-        md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)',
+        md: 'calc(var(--radius) - 4px)',
+        sm: 'calc(var(--radius) - 6px)',
+        xl: 'calc(var(--radius) + 4px)',
+        '2xl': 'calc(var(--radius) + 8px)',
+      },
+      spacing: {
+        18: '4.5rem',
+        22: '5.5rem',
+        26: '6.5rem',
+        30: '7.5rem',
       },
       colors: {
         // Episolve Brand Colors
@@ -118,41 +129,62 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'fade-in': {
+          from: { opacity: '0' },
+          to: { opacity: '1' },
+        },
+        'slide-up': {
+          from: { opacity: '0', transform: 'translateY(20px)' },
+          to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        'scale-in': {
+          from: { opacity: '0', transform: 'scale(0.95)' },
+          to: { opacity: '1', transform: 'scale(1)' },
+        },
       },
       typography: () => ({
         DEFAULT: {
           css: [
             {
-              '--tw-prose-body': 'var(--text)',
-              '--tw-prose-headings': 'var(--text)',
+              '--tw-prose-body': 'hsl(var(--foreground))',
+              '--tw-prose-headings': 'hsl(var(--foreground))',
+              maxWidth: 'none',
+              lineHeight: '1.75',
+              fontSize: '1.0625rem',
               h1: {
-                fontWeight: 'normal',
-                marginBottom: '0.25em',
-              },
-            },
-          ],
-        },
-        base: {
-          css: [
-            {
-              h1: {
-                fontSize: '2.5rem',
+                fontWeight: '700',
+                fontSize: '3rem',
+                lineHeight: '1.15',
+                letterSpacing: '-0.03em',
+                marginBottom: '0.5em',
               },
               h2: {
-                fontSize: '1.25rem',
-                fontWeight: 600,
+                fontWeight: '600',
+                fontSize: '2rem',
+                lineHeight: '1.3',
+                letterSpacing: '-0.02em',
+                marginTop: '2em',
+                marginBottom: '0.75em',
               },
-            },
-          ],
-        },
-        md: {
-          css: [
-            {
-              h1: {
-                fontSize: '3.5rem',
-              },
-              h2: {
+              h3: {
+                fontWeight: '600',
                 fontSize: '1.5rem',
+                lineHeight: '1.4',
+                letterSpacing: '-0.015em',
+                marginTop: '1.5em',
+                marginBottom: '0.5em',
+              },
+              p: {
+                marginTop: '1.25em',
+                marginBottom: '1.25em',
+              },
+              a: {
+                color: 'hsl(var(--primary))',
+                textDecoration: 'none',
+                fontWeight: '500',
+                '&:hover': {
+                  color: 'hsl(var(--secondary))',
+                },
               },
             },
           ],

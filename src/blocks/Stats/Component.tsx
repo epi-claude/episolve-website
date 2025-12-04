@@ -9,13 +9,22 @@ export const StatsBlock: React.FC<StatsBlockType> = ({ heading, stats, columns =
   }[columns]
 
   return (
-    <div className="container my-16">
-      {heading && <h2 className="mb-8 text-center text-3xl font-bold">{heading}</h2>}
-      <div className={`grid grid-cols-1 gap-8 ${columnClass}`}>
+    <div className="container my-20">
+      {heading && (
+        <h2 className="mb-12 text-center text-3xl font-bold tracking-tight text-foreground">
+          {heading}
+        </h2>
+      )}
+      <div className={`grid grid-cols-1 gap-6 ${columnClass}`}>
         {stats?.map((stat, index) => (
-          <div key={index} className="text-center">
-            <div className="mb-2 text-4xl font-bold text-blue-600">{stat.value}</div>
-            <div className="text-lg text-gray-600">{stat.label}</div>
+          <div
+            key={index}
+            className="group rounded-xl border border-border bg-card p-8 text-center shadow-sm transition-all hover:shadow-md hover:border-primary/50"
+          >
+            <div className="mb-3 text-5xl font-bold tracking-tight text-primary transition-colors group-hover:text-primary/90">
+              {stat.value}
+            </div>
+            <div className="text-base font-medium text-muted-foreground">{stat.label}</div>
           </div>
         ))}
       </div>

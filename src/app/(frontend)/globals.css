@@ -14,44 +14,43 @@
   }
 
   :root {
-    /* Episolve Brand Colors */
+    /* Episolve Brand Colors - From Reference Palette */
     --color-episolve-navy: #254071;
     --color-episolve-yellow: #FDFC8C;
-    --color-episolve-gold: #F4E87C;
     --color-episolve-blue-medium: #4A74A8;
     --color-episolve-blue-light: #8FB4D9;
     --color-episolve-blue-pale: #E6EAEF;
 
-    /* Theme Colors - Light Mode (using Episolve brand) */
-    --background: 0 0% 100%;
-    --foreground: 218 48% 22%; /* Episolve Navy as foreground */
+    /* Superhuman-inspired Theme - Light, Fresh, Clean */
+    --background: 0 0% 100%; /* Pure white background */
+    --foreground: 218 48% 22%; /* Navy for text */
 
-    --card: 220 33% 96%; /* Light blue tint */
+    --card: 0 0% 100%; /* White cards with subtle borders */
     --card-foreground: 218 48% 22%;
 
     --popover: 0 0% 100%;
     --popover-foreground: 218 48% 22%;
 
-    --primary: 218 48% 29%; /* Episolve Navy */
+    --primary: 218 48% 29%; /* Episolve Navy - primary actions */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 220 33% 93%; /* Pale blue */
-    --secondary-foreground: 218 48% 29%;
+    --secondary: 220 15% 56%; /* Medium blue for secondary actions */
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 220 33% 93%;
+    --muted: 220 20% 97%; /* Very light background for contrast sections */
     --muted-foreground: 215 15% 47%;
 
-    --accent: 60 98% 75%; /* Episolve Yellow accent */
+    --accent: 60 98% 76%; /* Bright yellow for highlights */
     --accent-foreground: 218 48% 29%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 220 20% 85%;
-    --input: 220 25% 92%;
-    --ring: 218 48% 29%; /* Navy ring */
+    --border: 220 13% 91%; /* Subtle borders */
+    --input: 220 13% 91%;
+    --ring: 220 15% 56%; /* Blue ring for focus states */
 
-    --radius: 0.5rem;
+    --radius: 12px; /* Larger, modern border radius */
 
     --success: 142 71% 45%;
     --warning: 38 92% 50%;
@@ -99,7 +98,31 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    @apply bg-background text-foreground min-h-[100vh] flex flex-col antialiased;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    letter-spacing: -0.011em;
+  }
+
+  /* Superhuman-style smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Better focus states */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+  }
+
+  /* Pulse animation for decorative elements */
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
   }
 }
 
