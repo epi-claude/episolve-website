@@ -72,6 +72,8 @@ export interface Config {
     services: Service;
     'team-members': TeamMember;
     testimonials: Testimonial;
+    leads: Lead;
+    subscribers: Subscriber;
     media: Media;
     categories: Category;
     users: User;
@@ -97,6 +99,8 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
     testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
+    leads: LeadsSelect<false> | LeadsSelect<true>;
+    subscribers: SubscribersSelect<false> | SubscribersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -206,7 +210,7 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock | StatsBlock | TestimonialsBlock)[];
   meta?: {
     title?: string | null;
     /**
@@ -787,6 +791,75 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  heading?: string | null;
+  stats?:
+    | {
+        /**
+         * e.g., "15+", "100%", "$2M+"
+         */
+        value: string;
+        /**
+         * e.g., "Years Experience", "Client Satisfaction"
+         */
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  columns?: ('2' | '3' | '4') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stats';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock".
+ */
+export interface TestimonialsBlock {
+  heading?: string | null;
+  source?: ('featured' | 'all' | 'manual') | null;
+  testimonials?: (number | Testimonial)[] | null;
+  /**
+   * Maximum number of testimonials to display
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonials';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "testimonials".
+ */
+export interface Testimonial {
+  id: number;
+  /**
+   * Testimonial quote (max 300 characters)
+   */
+  quote: string;
+  clientName: string;
+  clientRole?: string | null;
+  clientCompany?: string | null;
+  clientPhoto?: (number | null) | Media;
+  /**
+   * Show this testimonial on the homepage
+   */
+  featured?: boolean | null;
+  /**
+   * Lower numbers appear first
+   */
+  order?: number | null;
+  /**
+   * When the testimonial was received
+   */
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "services".
  */
 export interface Service {
@@ -896,30 +969,39 @@ export interface TeamMember {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
+ * via the `definition` "leads".
  */
-export interface Testimonial {
+export interface Lead {
   id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  company?: string | null;
+  service?: (number | null) | Service;
+  message: string;
+  source: 'contact_form' | 'service_page' | 'newsletter' | 'highlevel' | 'manual';
+  status: 'new' | 'contacted' | 'qualified' | 'converted' | 'closed';
+  notes?: string | null;
   /**
-   * Testimonial quote (max 300 characters)
+   * Automatically synced from HighLevel integration
    */
-  quote: string;
-  clientName: string;
-  clientRole?: string | null;
-  clientCompany?: string | null;
-  clientPhoto?: (number | null) | Media;
+  highLevelId?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers".
+ */
+export interface Subscriber {
+  id: number;
+  email: string;
+  source?: ('footer' | 'blog' | 'home' | 'contact') | null;
+  status?: ('active' | 'unsubscribed') | null;
   /**
-   * Show this testimonial on the homepage
+   * Automatically synced from HighLevel integration
    */
-  featured?: boolean | null;
-  /**
-   * Lower numbers appear first
-   */
-  order?: number | null;
-  /**
-   * When the testimonial was received
-   */
-  publishedAt?: string | null;
+  highLevelId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1134,6 +1216,14 @@ export interface PayloadLockedDocument {
         value: number | Testimonial;
       } | null)
     | ({
+        relationTo: 'leads';
+        value: number | Lead;
+      } | null)
+    | ({
+        relationTo: 'subscribers';
+        value: number | Subscriber;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
@@ -1243,6 +1333,8 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        stats?: T | StatsBlockSelect<T>;
+        testimonials?: T | TestimonialsBlockSelect<T>;
       };
   meta?:
     | T
@@ -1344,6 +1436,35 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  stats?:
+    | T
+    | {
+        value?: T;
+        label?: T;
+        id?: T;
+      };
+  columns?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock_select".
+ */
+export interface TestimonialsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  source?: T;
+  testimonials?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1439,6 +1560,36 @@ export interface TestimonialsSelect<T extends boolean = true> {
   featured?: T;
   order?: T;
   publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "leads_select".
+ */
+export interface LeadsSelect<T extends boolean = true> {
+  name?: T;
+  email?: T;
+  phone?: T;
+  company?: T;
+  service?: T;
+  message?: T;
+  source?: T;
+  status?: T;
+  notes?: T;
+  highLevelId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "subscribers_select".
+ */
+export interface SubscribersSelect<T extends boolean = true> {
+  email?: T;
+  source?: T;
+  status?: T;
+  highLevelId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1880,6 +2031,18 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Optional call-to-action button in header
+   */
+  ctaButton?: {
+    enabled?: boolean | null;
+    text?: string | null;
+    /**
+     * Internal path (e.g., /contact) or external URL
+     */
+    link?: string | null;
+    newTab?: boolean | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1909,6 +2072,36 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  companyInfo?: {
+    /**
+     * Company physical address
+     */
+    address?: string | null;
+    phone?: string | null;
+    email?: string | null;
+    /**
+     * e.g., Mon-Fri 9am-5pm EST
+     */
+    hours?: string | null;
+  };
+  /**
+   * Add links to your social media profiles
+   */
+  socialLinks?:
+    | {
+        platform: 'linkedin' | 'twitter' | 'facebook' | 'instagram' | 'github' | 'youtube';
+        /**
+         * Full URL to your social media profile
+         */
+        url: string;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Call-to-action text for newsletter signup (optional)
+   */
+  newsletterCTA?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1930,6 +2123,14 @@ export interface HeaderSelect<T extends boolean = true> {
               label?: T;
             };
         id?: T;
+      };
+  ctaButton?:
+    | T
+    | {
+        enabled?: T;
+        text?: T;
+        link?: T;
+        newTab?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1954,6 +2155,23 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  companyInfo?:
+    | T
+    | {
+        address?: T;
+        phone?: T;
+        email?: T;
+        hours?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        newTab?: T;
+        id?: T;
+      };
+  newsletterCTA?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
