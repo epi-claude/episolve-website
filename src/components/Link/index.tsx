@@ -1,5 +1,6 @@
 import { Button, type ButtonProps } from '@/components/ui/button'
 import { cn } from '@/utilities/ui'
+import { matomoEvents } from '@/utilities/matomo'
 import Link from 'next/link'
 import React from 'react'
 
@@ -45,10 +46,17 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
   const size = appearance === 'link' ? 'clear' : sizeFromProps
   const newTabProps = newTab ? { rel: 'noopener noreferrer', target: '_blank' } : {}
 
+  // Track consultation booking clicks
+  const handleClick = () => {
+    if (label && (label.toLowerCase().includes('consultation') || label.toLowerCase().includes('book'))) {
+      matomoEvents.bookConsultation(label)
+    }
+  }
+
   /* Ensure we don't break any styles set by richText */
   if (appearance === 'inline') {
     return (
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
+      <Link className={cn(className)} href={href || url || ''} onClick={handleClick} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
@@ -57,7 +65,7 @@ export const CMSLink: React.FC<CMSLinkType> = (props) => {
 
   return (
     <Button asChild className={className} size={size} variant={appearance}>
-      <Link className={cn(className)} href={href || url || ''} {...newTabProps}>
+      <Link className={cn(className)} href={href || url || ''} onClick={handleClick} {...newTabProps}>
         {label && label}
         {children && children}
       </Link>
